@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Project Sunday — Pricing Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Karla:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1F5FBF; --blue-dk:#174A96; --blue-lt:#EEF4FC; --blue-bd:#B9CFEF;
+  --dark:#0F0F0F; --ink:#1C1C1C; --mid:#6B6B6B; --light:#F0EFED; --white:#FFFFFF;
+  --border:#DDDBD8; --success:#2A7A4B; --error:#C0392B; --warn:#D9822B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--light);color:var(--ink);font-family:'Karla',system-ui,sans-serif;font-size:15px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}
+.hdr{position:sticky;top:0;z-index:20}
+.topbar{background:var(--dark);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;gap:12px}
+.logo{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:.06em;font-size:15px;white-space:nowrap}
+.logo em{font-style:normal;color:#7FB0F5}
+.sec-label{font-size:12px;color:#BDBDBD;text-align:right}
+.progress{height:4px;background:#2A2A2A}
+.progress>div{height:100%;background:var(--blue);transition:width .3s}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 110px}
+.banner{background:#FFF7E6;border:1px solid #F3D9A4;border-radius:6px;padding:10px 12px;font-size:13px;margin-bottom:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.banner button{background:none;border:none;color:var(--blue);font-weight:600;cursor:pointer;white-space:nowrap}
+.sec-kicker{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--blue)}
+.sec-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin:2px 0}
+.sec-est{font-size:13px;color:var(--mid);margin-bottom:14px}
+.card{background:var(--white);border:1px solid var(--border);border-radius:6px;margin-bottom:14px;overflow:hidden}
+.card-head{background:#F7F6F4;padding:9px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.q-num{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--blue)}
+.card-body{padding:14px}
+.q-hint{font-style:italic;font-size:12.5px;color:var(--mid);margin-bottom:10px}
+.instr{background:var(--blue-lt);color:#16386E;border-radius:6px;padding:12px 14px;font-size:13px;margin-bottom:14px}
+.instr b{display:block;margin-bottom:4px}
+.note{background:var(--blue-lt);border-left:3px solid var(--blue);padding:8px 12px;font-size:12.5px;margin:8px 0}
+label.f{display:block;font-size:12.5px;font-weight:600;color:#444;margin:8px 0 4px}
+input[type=text],input[type=number],textarea{width:100%;padding:10px;border:1px solid #CFCCC8;border-radius:6px;background:#fff;font-size:15px}
+input:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 2px rgba(31,95,191,.15)}
+input[readonly]{background:#F3F2F0;color:var(--mid)}
+input.bad{border-color:var(--error)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 6px}
+.chip{border:1px solid #CFCCC8;background:#fff;border-radius:18px;padding:7px 13px;font-size:13.5px;cursor:pointer;line-height:1.2}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.chip.hl:not(.on){background:var(--blue-lt);border-color:var(--blue-bd);font-weight:600}
+.fmt-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px}
+.brand{border:1px solid var(--border);border-radius:6px;margin:8px 0;background:#fff}
+.brand.hl{background:var(--blue-lt);border-color:var(--blue-bd)}
+.brand-h{display:flex;justify-content:space-between;align-items:center;padding:11px 12px;cursor:pointer;user-select:none}
+.brand-h b{font-size:14px}
+.done{font-size:11px;color:var(--success);margin-left:6px;font-weight:600}
+.tog{font-size:20px;color:var(--mid);line-height:1}
+.brand-b{padding:0 12px 12px}
+.sku{border:1px solid var(--border);border-radius:6px;padding:10px;margin-top:8px;background:#fff}
+.sku-t{font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.05em;display:flex;justify-content:space-between}
+.sku-t button{background:none;border:none;color:var(--error);font-size:12px;cursor:pointer;text-transform:none;letter-spacing:0}
+.g4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.calc{font-size:12px;color:var(--blue);margin-top:6px;min-height:14px}
+.err{font-size:11.5px;color:var(--error);margin-top:4px}
+.add-sku{width:100%;margin-top:8px;padding:9px;border:1px dashed #BDBAB5;border-radius:6px;background:#fff;color:var(--mid);cursor:pointer;font-size:13px}
+.addrow{display:flex;gap:8px;margin-top:6px}.addrow input{flex:1}
+.btn{border:none;border-radius:6px;padding:12px 18px;font-weight:700;font-family:'Syne',sans-serif;font-size:14px;cursor:pointer}
+.btn-p{background:var(--blue);color:#fff}.btn-s{background:#fff;border:1px solid #CFCCC8;color:var(--ink)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:10px 16px;z-index:20}
+.nav-in{max-width:640px;margin:0 auto;display:flex;gap:10px}.nav-in .btn{flex:1}
+.msg{max-width:640px;margin:0 auto 6px;font-size:13px;text-align:center}
+.msg.err{color:var(--error)}.msg.load{color:var(--blue)}
+.overlay{position:fixed;inset:0;background:rgba(15,15,15,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.overlay.show{display:flex}
+.ov-box{background:#fff;border-radius:10px;max-width:420px;width:100%;padding:26px 20px;text-align:center}
+.ov-box h2{font-family:'Syne',sans-serif;font-size:20px;margin:8px 0}
+.ov-box p{font-size:14px;color:var(--mid);margin-bottom:16px}
+.ov-box .btn{width:100%;margin-top:8px}
+.muted{color:var(--mid);font-size:12.5px}
+.hidden{display:none!important}
+
+</style>
+</head>
+<body>
+<div class="hdr"><div class="topbar"><div class="logo">PROJECT <em>SUNDAY</em></div><div class="sec-label" id="secLabel"></div></div>
+<div class="progress"><div id="prog" style="width:0%"></div></div></div>
+<div class="wrap">
+  <div id="draftBanner" class="banner hidden"><span>Draft restored from earlier on this phone.</span><button type="button" id="freshBtn">Start fresh</button></div>
+  <div id="step1"></div><div id="step2" class="hidden"></div>
+</div>
+<div class="nav"><div class="msg" id="msg"></div><div class="nav-in"><button class="btn btn-s" id="backBtn" type="button">← Back</button><button class="btn btn-p" id="nextBtn" type="button">Next: Prices →</button></div></div>
+<div class="overlay" id="okOverlay"><div class="ov-box">
+  <div style="font-size:42px">✅</div><h2>Submitted successfully</h2>
+  <p>The prices have been saved. You can close this page or start the next outlet.</p>
+  <button class="btn btn-p" type="button" id="againBtn">Submit another response</button>
+</div></div>
+
+<script>
+/* ============ CONFIG ============ */
+const SCRIPT_URL = 'PASTE_APPS_SCRIPT_URL_HERE';           // Google Apps Script web app URL (same as retailer survey)
+const DRAFT_KEY = 'sunday_pricing_draft_v1';
+
+const BASE_BRANDS = ['Hocco','Amul','Havmor','Vadilal',"Kwality Wall's",'Cream Bell','Mother Dairy',"Dinshaw's",'Arun','Local / unbranded'];
+const FORMATS = ['Family tubs (multi-serve)','Cups','Cones','Sticks and bars','Multi-packs (multi-serve)','Kulfi and traditional','Other frozen'];
+const START_ROWS = 3;
+
+/* ============ STATE ============ */
+function newId(prefix){ const d=new Date(),p=n=>String(n).padStart(2,'0');
+  return prefix+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+'-'+Math.random().toString(36).slice(2,6).toUpperCase(); }
+function blankState(){ return {id:newId('SUNP-'), started:new Date().toISOString(), linked:false,
+  meta:{enumerator:'',city:'',area:'',store:'',test:false,oid:''}, brands:[], customBrands:[], data:{}, open:{}, remarks:''}; }
+let state=blankState(), step=1;
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{const n=parseFloat(String(v==null?'':v).replace(/,/g,''));return isNaN(n)?null:n};
+const inr=n=>n==null?'':'₹'+(Math.round(n*100)/100).toLocaleString('en-IN');
+const allBrands=()=>BASE_BRANDS.concat(state.customBrands);
+const selBrands=()=>allBrands().filter(b=>state.brands.includes(b));
+const key=(f,b)=>f+'||'+b;
+function rows(f,b){ const k=key(f,b); if(!state.data[k]) state.data[k]=Array.from({length:START_ROWS},()=>({})); return state.data[k]; }
+const started=r=>['product','pack','mrp','sell','buy'].some(x=>String(r[x]||'').trim()!=='');
+function filledCount(f,b){ const k=key(f,b); return (state.data[k]||[]).filter(started).length; }
+function margin(r){ const s=num(r.sell), c=num(r.buy); return s&&c!=null?(s-c)/s*100:null; }
+function rowErrors(r){ const e={}; if(!started(r)) return e;
+  if(!String(r.product||'').trim()) e.product='Product / flavour needed';
+  if(num(r.mrp)==null) e.mrp='MRP needed';
+  if(num(r.mrp)!=null&&num(r.sell)!=null&&num(r.sell)>num(r.mrp)) e.sell='Selling price is above MRP. Please check.';
+  return e; }
+
+/* ============ STEP 1 ============ */
+function renderStep1(){
+  const m=state.meta, L=state.linked;
+  return `<div class="sec-kicker">STEP 1 OF 2</div><div class="sec-title">Store details</div><div class="sec-est">Est. 1 min</div>
+  <div class="instr"><b>Instructions for the field team</b>
+    1. Pick every ice cream brand this store sells.<br>2. On the next screen, open each format and brand, and fill one row per product.<br>
+    3. MRP = price printed on the pack · Selling price = price the store charges customers · Purchase price = what the store pays (fill if known).<br>
+    4. Add rows with "+ Add SKU". Leave brands closed if the store doesn't sell them in that format.</div>
+  <div class="card"><div class="card-head"><span class="q-num">Outlet details</span></div><div class="card-body">
+    ${L?'<div class="note">Opened from the retailer survey. Store details are filled in.</div>':''}
+    <label class="f">Enumerator name *</label><input type="text" data-m="enumerator" value="${esc(m.enumerator)}" placeholder="Your full name">
+    <div class="grid2"><div><label class="f">City</label><input type="text" data-m="city" value="${esc(m.city)}" placeholder="e.g. Ahmedabad"></div>
+    <div><label class="f">Area / locality</label><input type="text" data-m="area" value="${esc(m.area)}" placeholder="e.g. Navrangpura"></div></div>
+    <label class="f">Store name *</label><input type="text" data-m="store" value="${esc(m.store)}" placeholder="e.g. Shree Ganesh General Store">
+    <label class="f">Outlet ID from retailer survey</label><input type="text" data-m="oid" value="${esc(m.oid)}" placeholder="e.g. SUN-260930-AB12 (leave blank if none)"${L?' readonly':''}>
+    <div style="margin-top:10px"><button type="button" class="chip${m.test?' on':''}" id="testBtn">Test response (tick for practice or trial runs)</button></div>
+  </div></div>
+  <div class="card"><div class="card-head"><span class="q-num">Brands sold in this store</span></div><div class="card-body">
+    <div class="q-hint">${L?'Pre-filled from the retailer survey. ':''}Tap every brand the store sells. Only these brands appear on the next screen.</div>
+    <div class="chips">${allBrands().map(b=>`<button type="button" class="chip${state.brands.includes(b)?' on':''}${b==='Hocco'?' hl':''}" data-brand="${esc(b)}">${esc(b)}</button>`).join('')}</div>
+    <div class="addrow"><input type="text" id="newBrand" placeholder="Brand not in list"><button type="button" class="btn btn-s" id="addBrandBtn">+ Add brand</button></div>
+  </div></div>`;
+}
+
+/* ============ STEP 2 ============ */
+function skuRow(f,b,i,r){
+  const e=rowErrors(r), mg=margin(r), p=`${esc(f)}||${esc(b)}||${i}`;
+  const per=num(r.sell)&&num(r.pack)?(num(r.sell)/num(r.pack)*100):null;
+  return `<div class="sku"><div class="sku-t"><span>SKU ${i+1}</span>${i>=START_ROWS?`<button type="button" data-delrow="${p}">Remove</button>`:''}</div>
+    <label class="f">Product / flavour</label><input type="text" data-r="${p}" data-field="product" value="${esc(r.product)}" placeholder="e.g. Butterscotch cone" class="${e.product?'bad':''}">
+    <div class="g4">
+      <div><label class="f">Pack size (ml)</label><input type="number" inputmode="numeric" data-r="${p}" data-field="pack" value="${esc(r.pack)}" placeholder="ml"></div>
+      <div><label class="f">MRP ₹</label><input type="number" inputmode="decimal" data-r="${p}" data-field="mrp" value="${esc(r.mrp)}" placeholder="₹" class="${e.mrp?'bad':''}"></div>
+      <div><label class="f">Selling ₹</label><input type="number" inputmode="decimal" data-r="${p}" data-field="sell" value="${esc(r.sell)}" placeholder="₹" class="${e.sell?'bad':''}"></div>
+      <div><label class="f">Purchase ₹ (if known)</label><input type="number" inputmode="decimal" data-r="${p}" data-field="buy" value="${esc(r.buy)}" placeholder="₹"></div>
+    </div>
+    <div class="calc" data-calc="${p}">${calcText(r)}</div>
+    <div class="err" data-err="${p}">${Object.values(e).join(' · ')}</div></div>`;
+}
+function calcText(r){ const mg=margin(r); const s=num(r.sell), pk=num(r.pack); const bits=[];
+  if(mg!=null) bits.push(`Retailer margin ${mg.toFixed(1)}% of selling price`); if(s&&pk) bits.push(`${inr(s/pk*100)} per 100 ml`); return bits.join(' · '); }
+function renderStep2(){
+  const bs=selBrands();
+  let h=`<div class="sec-kicker">STEP 2 OF 2</div><div class="sec-title">Prices by format</div><div class="sec-est">Est. 8–10 min · Read prices from packs, ask for purchase price</div>
+  <div class="instr"><b>Quick reminder</b>Tap a brand to open it. Fill one row per product. MRP = printed price · Selling = what customers pay here · Purchase = what the store pays (optional).</div>`;
+  if(!bs.length) return h+'<div class="note">No brands selected. Go back and pick the brands this store sells.</div>';
+  FORMATS.forEach(f=>{
+    h+=`<div class="card"><div class="card-body"><div class="fmt-name">${esc(f)}</div>`;
+    bs.forEach(b=>{ const k=key(f,b), open=!!state.open[k], n=filledCount(f,b);
+      h+=`<div class="brand${b==='Hocco'?' hl':''}"><div class="brand-h" data-open="${esc(k)}"><span><b>${esc(b)}</b>${n?`<span class="done">✓ ${n} SKU${n>1?'s':''}</span>`:''}</span><span class="tog">${open?'−':'+'}</span></div>
+      ${open?`<div class="brand-b">${rows(f,b).map((r,i)=>skuRow(f,b,i,r)).join('')}<button type="button" class="add-sku" data-addrow="${esc(k)}">+ Add SKU</button></div>`:''}</div>`; });
+    h+='</div></div>';
+  });
+  h+=`<div class="card"><div class="card-head"><span class="q-num">Remarks (optional)</span></div><div class="card-body"><textarea id="remarks" placeholder="Anything unusual about prices in this store?">${esc(state.remarks)}</textarea></div></div>`;
+  return h;
+}
+
+/* ============ RENDER / NAV ============ */
+function show(n){ step=n; $('#step1').classList.toggle('hidden',n!==1); $('#step2').classList.toggle('hidden',n!==2);
+  $('#step'+n).innerHTML = n===1?renderStep1():renderStep2();
+  $('#secLabel').textContent = n===1?'Step 1 of 2 — Store details':'Step 2 of 2 — Prices';
+  $('#prog').style.width = n===1?'30%':'80%';
+  $('#backBtn').style.visibility = n===1?'hidden':'visible';
+  $('#nextBtn').textContent = n===1?'Next: Prices →':'Submit survey';
+  setMsg(''); window.scrollTo(0,0); }
+function rerender(){ const y=window.scrollY; $('#step'+step).innerHTML = step===1?renderStep1():renderStep2(); window.scrollTo(0,y); }
+function setMsg(t,c){ const m=$('#msg'); m.textContent=t; m.className='msg'+(c?' '+c:''); }
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,[data-open]'); if(!t) return;
+  if(t.dataset.brand){ const b=t.dataset.brand; state.brands=state.brands.includes(b)?state.brands.filter(x=>x!==b):state.brands.concat([b]); saveDraft(); rerender(); return; }
+  if(t.id==='testBtn'){ state.meta.test=!state.meta.test; saveDraft(); rerender(); return; }
+  if(t.id==='addBrandBtn'){ const inp=$('#newBrand'); const name=(inp.value||'').trim().replace(/\|/g,'/');
+    if(!name) return; if(allBrands().some(b=>b.toLowerCase()===name.toLowerCase())){ setMsg('That brand is already in the list.','err'); return; }
+    state.customBrands.push(name); state.brands.push(name); saveDraft(); rerender(); return; }
+  if(t.dataset.open){ state.open[t.dataset.open]=!state.open[t.dataset.open]; rerender(); return; }
+  if(t.dataset.addrow){ const [f,b]=t.dataset.addrow.split('||'); rows(f,b).push({}); saveDraft(); rerender(); return; }
+  if(t.dataset.delrow){ const [f,b,i]=t.dataset.delrow.split('||'); rows(f,b).splice(+i,1); saveDraft(); rerender(); return; }
+});
+document.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.dataset.m!==undefined){ state.meta[el.dataset.m]=el.value; saveDraft(); return; }
+  if(el.id==='remarks'){ state.remarks=el.value; saveDraft(); return; }
+  if(el.dataset.r!==undefined){ const [f,b,i]=el.dataset.r.split('||'); const r=rows(f,b)[+i]; r[el.dataset.field]=el.value; saveDraft();
+    const c=document.querySelector(`[data-calc="${CSS.escape(el.dataset.r)}"]`); if(c) c.textContent=calcText(r); }
+});
+document.addEventListener('change',e=>{ if(e.target.dataset && e.target.dataset.r!==undefined){ const y=window.scrollY; const [f,b,i]=e.target.dataset.r.split('||');
+  const er=document.querySelector(`[data-err="${CSS.escape(e.target.dataset.r)}"]`); if(er) er.textContent=Object.values(rowErrors(rows(f,b)[+i])).join(' · '); } });
+$('#backBtn').onclick=()=>show(1);
+$('#nextBtn').onclick=()=>{ if(step===1){ if(!selBrands().length){ setMsg('Pick at least one brand this store sells.','err'); return; } show(2); } else submitAll(); };
+$('#freshBtn').onclick=()=>{ if(!window.confirm('Clear everything and start a new pricing survey?')) return; clearDraft(); state=blankState(); $('#draftBanner').classList.add('hidden'); show(1); };
+$('#againBtn').onclick=()=>{ clearDraft(); window.location.href=window.location.pathname; };
+
+/* ============ DRAFT ============ */
+let dt=null;
+function saveDraft(){ clearTimeout(dt); dt=setTimeout(()=>{ try{ localStorage.setItem(DRAFT_KEY,JSON.stringify(state)); }catch(e){} },300); }
+function clearDraft(){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
+function loadDraft(){ try{ const d=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null'); return d&&d.id?d:null; }catch(e){ return null; } }
+
+/* ============ SUBMIT ============ */
+function collect(){
+  const m=state.meta;
+  const head=[['Pricing response ID',state.id],['Outlet ID (retailer survey)',m.oid],['Test response',m.test?'Yes':'No'],['Started at (phone)',state.started],['Submitted at (phone)',new Date().toISOString()],
+    ['Enumerator',m.enumerator.trim()],['City',m.city.trim()],['Area / locality',m.area.trim()],['Store name',m.store.trim()],['Brands sold',selBrands().join(' | ')],['Remarks',state.remarks]];
+  const out=[];
+  FORMATS.forEach(f=>selBrands().forEach(b=>(state.data[key(f,b)]||[]).forEach(r=>{ if(!started(r)) return;
+    const mg=margin(r), s=num(r.sell), pk=num(r.pack);
+    out.push({'Format':f,'Brand':b,'Product / flavour':r.product||'','Pack size (ml)':r.pack||'','MRP (₹)':r.mrp||'','Selling price (₹)':r.sell||'','Purchase price (₹)':r.buy||'',
+      'Retailer margin (% of selling price)':mg==null?'':mg.toFixed(1),'Selling price per 100 ml (₹)':s&&pk?(s/pk*100).toFixed(2):''}); })));
+  return {head,rows:out};
+}
+async function submitAll(){
+  const m=state.meta;
+  if(!m.enumerator.trim()||!m.store.trim()){ setMsg('⚠ Please fill in Enumerator name and Store name (Step 1).','err'); return; }
+  let errs=0; FORMATS.forEach(f=>selBrands().forEach(b=>(state.data[key(f,b)]||[]).forEach(r=>{ if(Object.keys(rowErrors(r)).length) errs++; })));
+  if(errs){ FORMATS.forEach(f=>selBrands().forEach(b=>{ if((state.data[key(f,b)]||[]).some(r=>Object.keys(rowErrors(r)).length)) state.open[key(f,b)]=true; })); rerender();
+    setMsg(`⚠ ${errs} row${errs>1?'s need':' needs'} fixing (marked in red).`,'err'); return; }
+  const c=collect(); if(!c.rows.length){ setMsg('⚠ Please enter at least one product price.','err'); return; }
+  if(SCRIPT_URL.indexOf('PASTE_')===0){ setMsg('This survey is not connected to the Google Sheet yet. Tell the survey owner.','err'); return; }
+  const btn=$('#nextBtn'); btn.disabled=true; setMsg('Submitting… please do not close this page.','load');
+  const body=JSON.stringify({survey:'pricing',id:state.id,head:c.head,rows:c.rows});
+  const once=()=>Promise.race([fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body}),
+                               new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),30000))]);
+  try{ try{ await once(); }catch(e1){ if(e1.message==='timeout'){ setMsg('Still sending… retrying once.','load'); await once(); } else throw e1; }
+    clearDraft(); setMsg(''); $('#okOverlay').classList.add('show');
+  }catch(err){ btn.disabled=false; setMsg('⚠ Could not submit. Check the internet and tap Submit again. Your entries are saved on this phone.','err'); }
+}
+
+/* ============ START ============ */
+(function init(){
+  const q=new URLSearchParams(location.search), draft=loadDraft();
+  if(q.get('oid')){
+    if(draft && draft.meta && draft.meta.oid===q.get('oid')){ state=Object.assign(blankState(),draft); $('#draftBanner').classList.remove('hidden'); }
+    else { state=blankState(); state.linked=true;
+      state.meta={enumerator:q.get('enumerator')||'',city:q.get('city')||'',area:q.get('area')||'',store:q.get('store')||'',test:q.get('test')==='1',oid:q.get('oid')};
+      const bs=(q.get('brands')||'').split('|').map(s=>s.trim()).filter(Boolean);
+      bs.forEach(b=>{ if(!BASE_BRANDS.includes(b)&&!state.customBrands.includes(b)) state.customBrands.push(b); });
+      state.brands=bs; saveDraft(); }
+  } else if(draft){ state=Object.assign(blankState(),draft); $('#draftBanner').classList.remove('hidden'); }
+  show(1);
+})();
+</script>
+</body>
+</html>
